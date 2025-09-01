@@ -1,0 +1,71 @@
+{
+  "nombre": "Liga de los Fantásticos - Datos de Prueba",
+  "totalJornadas": 38,
+  "reglas": {
+    "ultimo": 2.5,
+    "penultimo": 1.5,
+    "antepenultimo": 1.0
+  },
+  "jugadores": [
+    {
+      "nombre": "Miguel",
+      "jornadas": [90, 20, 20, 50, 50, 50, 30, 30, 30, 30]
+    },
+    {
+      "nombre": "Alvaro",
+      "jornadas": [85, 20, 25, 45, 45, 45, 25, 25, 25, 25]
+    },
+    {
+      "nombre": "Marcos Alonso",
+      "jornadas": [80, 20, 30, 40, 40, 40, 20, 20, 20, 20]
+    },
+    {
+      "nombre": "Marcos Vaz",
+      "jornadas": [75, 15, 35, 35, 35, 35, 15, 15, 15, 15]
+    },
+    {
+      "nombre": "Cristopher",
+      "jornadas": [70, 15, 40, 30, 30, 30, 10, 10, 10, 10]
+    },
+    {
+      "nombre": "Nachon",
+      "jornadas": [65, 15, 45, 25, 25, 25, 5, 5, 5, 5]
+    },
+    {
+      "nombre": "Nacho",
+      "jornadas": [60, 10, 50, 20, 20, 20, 0, 0, 0, 0]
+    },
+    {
+      "nombre": "Dani",
+      "jornadas": [55, 10, 55, 15, 15, 15, 0, 0, 0, 0]
+    },
+    {
+      "nombre": "David",
+      "jornadas": [50, 10, 60, 10, 10, 10, 0, 0, 0, 0]
+    },
+    {
+      "nombre": "Jesus",
+      "jornadas": [45, 5, 65, 5, 5, 5, 0, 0, 0, 0]
+    },
+    {
+      "nombre": "Juanan",
+      "jornadas": [40, 5, 70, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "nombre": "Liam",
+      "jornadas": [35, 5, 75, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "nombre": "Erick",
+      "jornadas": [30, 0, 80, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "nombre": "Fredo",
+      "jornadas": [25, 0, 85, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "nombre": "Hugo",
+      "jornadas": [20, 0, 90, 0, 0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

@@ -1,0 +1,490 @@
+---
+// Importar datos desde archivo JSON
+import ligaData from "../data/liga.json";
+import "../styles/main.css";
+
+// Definir tipos TypeScript
+interface Jugador {
+  nombre: string;
+  jornadas: number[];
+  total?: number;
+}
+
+interface Reglas {
+  ultimo: number;
+  penultimo: number;
+  antepenultimo: number;
+}
+
+interface PuntoJornada {
+  nombre: string;
+  puntos: number;
+}
+
+const { nombre: nombreLiga, totalJornadas, reglas, jugadores } = ligaData;
+
+// Función para calcular el dinero que debe cada jugador y los colores por jornada
+function calcularDinero(
+  jugadores: Jugador[],
+  reglas: Reglas
+): { dineroTotal: Record<string, number>; coloresPorJornada: Record<string, string[]>; dineroPorJornada: Record<string, number[]> } {
+  const numJornadas = jugadores[0].jornadas.length;
+  const dineroTotal: Record<string, number> = {};
+  const coloresPorJornada: Record<string, string[]> = {};
+  const dineroPorJornada: Record<string, number[]> = {};
+
+  // Inicializar dinero y colores para cada jugador
+  jugadores.forEach((jugador: Jugador) => {
+    dineroTotal[jugador.nombre] = 0;
+    coloresPorJornada[jugador.nombre] = new Array(numJornadas).fill('');
+    dineroPorJornada[jugador.nombre] = new Array(numJornadas).fill(0);
+  });
+
+  // Calcular dinero por cada jornada
+  for (let jornada = 0; jornada < numJornadas; jornada++) {
+    const puntosJornada: PuntoJornada[] = jugadores.map((jugador: Jugador) => ({
+      nombre: jugador.nombre,
+      puntos: jugador.jornadas[jornada],
+    }));
+
+    // Verificar si todos tienen 0 puntos
+    const todosCero = puntosJornada.every(p => p.puntos === 0);
+    
+    // Si todos tienen 0 puntos, nadie paga
+    if (todosCero) {
+      continue;
+    }
+
+    // Ordenar de menor a mayor puntos
+    puntosJornada.sort(
+      (a: PuntoJornada, b: PuntoJornada) => a.puntos - b.puntos
+    );
+
+    // Asignar penalizaciones y colores manejando empates
+    const penalizaciones = [reglas.ultimo, reglas.penultimo, reglas.antepenultimo];
+    const colores = ['pago-alto', 'pago-medio', 'pago-bajo'];
+    
+    let posicionActual = 0;
+    
+    while (posicionActual < puntosJornada.length && posicionActual < 3) {
+      const puntosActuales = puntosJornada[posicionActual].puntos;
+      const jugadoresEmpatados = [];
+      
+      // Encontrar todos los jugadores con la misma puntuación
+      for (let i = posicionActual; i < puntosJornada.length && puntosJornada[i].puntos === puntosActuales; i++) {
+        jugadoresEmpatados.push(puntosJornada[i]);
+      }
+      
+      // Calcular el dinero total a distribuir entre los empatados
+      let dineroTotalEmpate = 0;
+      const posicionesAfectadas = Math.min(jugadoresEmpatados.length, 3 - posicionActual);
+      
+      for (let i = 0; i < posicionesAfectadas; i++) {
+        dineroTotalEmpate += penalizaciones[posicionActual + i];
+      }
+      
+      // Distribuir equitativamente el dinero entre los jugadores empatados
+      const dineroPorJugador = dineroTotalEmpate / jugadoresEmpatados.length;
+      
+      // Asignar color basado en la posición más alta del empate
+      const colorEmpate = colores[posicionActual];
+      
+      jugadoresEmpatados.forEach(jugador => {
+        dineroTotal[jugador.nombre] += dineroPorJugador;
+        coloresPorJornada[jugador.nombre][jornada] = colorEmpate;
+        dineroPorJornada[jugador.nombre][jornada] = dineroPorJugador;
+      });
+      
+      // Avanzar la posición actual
+      posicionActual += jugadoresEmpatados.length;
+    }
+  }
+
+  return { dineroTotal, coloresPorJornada, dineroPorJornada };
+}
+
+const { dineroTotal: dineroDebido, coloresPorJornada, dineroPorJornada } = calcularDinero(jugadores as Jugador[], reglas as Reglas);
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{nombreLiga}</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🏆 {nombreLiga} 🏆</h1>
+
+      <div class="rules-container">
+        <div class="rules collapsible-section">
+          <div class="section-header" onclick="toggleSection('rules')">
+            <h3>📋 Reglas de la Liga</h3>
+            <div class="expand-icon" id="rules-icon">▼</div>
+          </div>
+          <div class="section-content" id="rules-content">
+            <ul>
+              <li>
+                <strong>Último de la jornada:</strong> Paga {reglas.ultimo}€
+              </li>
+              <li>
+                <strong>Penúltimo de la jornada:</strong> Paga {reglas.penultimo}€
+              </li>
+              <li>
+                <strong>Antepenúltimo de la jornada:</strong> Paga {
+                  reglas.antepenultimo
+                }€
+              </li>
+              <li>
+                <strong>En caso de empate:</strong> El dinero de las posiciones empatadas se suma y se divide equitativamente entre los jugadores involucrados. Por ejemplo, si dos jugadores empatan en último lugar, cada uno paga 2€ (2.5€ + 1.5€ ÷ 2).
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="rules status-rules collapsible-section">
+          <div class="section-header" onclick="toggleSection('status')">
+            <h3>📊 Estado de la Liga</h3>
+            <div class="expand-icon" id="status-icon">▼</div>
+          </div>
+          <div class="section-content" id="status-content">
+            <p>
+              <strong>Jornadas jugadas:</strong>
+              {jugadores[0].jornadas.length} de {totalJornadas}
+            </p>
+            <p>
+              <strong>Progreso:</strong>
+              {Math.round((jugadores[0].jornadas.length / totalJornadas) * 100)}%
+              completado
+            </p>
+            <p class="desktop-only">
+              <em>Desliza horizontalmente en la tabla para navegar</em>
+            </p>
+            <p class="mobile-only">
+              <em>Toca las tarjetas para expandir y ver las jornadas</em>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Table View -->
+      <div class="table-wrapper desktop-only">
+        <div class="table-container">
+          <div class="fixed-columns">
+            <table class="fixed-table">
+              <thead>
+                <tr>
+                  <th class="jugador-column">Jugador</th>
+                  <th class="total-column sortable" data-column="total">
+                    Total <span class="sort-indicator">↕</span>
+                  </th>
+                  <th class="dinero-column sortable" data-column="dinero">
+                    Debe (€) <span class="sort-indicator">↕</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  jugadores.map((jugador) => (
+                    <tr>
+                      <td class="jugador-column">
+                        <strong>{jugador.nombre}</strong>
+                      </td>
+                      <td class="total-column">
+                        {jugador.jornadas.reduce(
+                          (sum, puntos) => sum + puntos,
+                          0
+                        )}
+                      </td>
+                      <td class="dinero-column">
+                        {dineroDebido[jugador.nombre].toFixed(2)}€
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="scrollable-columns">
+            <table class="scrollable-table">
+              <thead>
+                <tr>
+                  {
+                    (() => {
+                      const numJornadas = jugadores[0].jornadas.length;
+                      const headers = [];
+                      for (let i = 0; i < numJornadas; i++) {
+                        headers.push(
+                          <th
+                            class="jornada-column sortable"
+                            data-column={`jornada-${i}`}
+                          >
+                            J{i + 1} <span class="sort-indicator">↕</span>
+                          </th>
+                        );
+                      }
+                      return headers;
+                    })()
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  jugadores.map((jugador) => (
+                    <tr>
+                      {jugador.jornadas.map((puntos, jornadaIndex) => {
+                        const dineroJornada = dineroPorJornada[jugador.nombre][jornadaIndex];
+                        const tienePago = dineroJornada > 0;
+                        return (
+                          <td class={`jornada-cell ${coloresPorJornada[jugador.nombre][jornadaIndex]}`} title={tienePago ? `Paga: ${dineroJornada.toFixed(2)}€` : ''}>
+                            <div class="jornada-content">
+                              <span class="puntos">{puntos}</span>
+                              {tienePago && <span class="pago-jornada">{dineroJornada.toFixed(2)}€</span>}
+                            </div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Card View -->
+      <div class="mobile-cards mobile-only">
+        {
+          jugadores.map((jugador, index) => (
+            <div class="player-card" data-player-index={index}>
+              <div class="card-header" onclick={`toggleCard(${index})`}>
+                <div class="player-info">
+                  <h3 class="player-name">{jugador.nombre}</h3>
+                </div>
+                <div class="player-stats-right">
+                  <span class="total-points">
+                    {jugador.jornadas.reduce((sum, puntos) => sum + puntos, 0)} pts
+                  </span>
+                  <span class="money-owed">
+                    {dineroDebido[jugador.nombre].toFixed(2)}€
+                  </span>
+                  <div class="expand-icon">▼</div>
+                </div>
+              </div>
+              <div class="card-content">
+                <div class="jornadas-grid">
+                  {
+                    jugador.jornadas.map((puntos, jornadaIndex) => {
+                      const dineroJornada = dineroPorJornada[jugador.nombre][jornadaIndex];
+                      const tienePago = dineroJornada > 0;
+                      return (
+                        <div class={`jornada-item ${coloresPorJornada[jugador.nombre][jornadaIndex]}`}>
+                          <span class="jornada-label">J{jornadaIndex + 1}</span>
+                          <div class="jornada-info">
+                            <span class="jornada-points">{puntos}</span>
+                            {tienePago && <span class="jornada-pago">{dineroJornada.toFixed(2)}€</span>}
+                          </div>
+                        </div>
+                      );
+                    })
+                  }
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <script>
+      let sortState = {}; // Mantiene el estado de ordenamiento para cada columna
+
+      // Función para alternar la expansión de las tarjetas en móvil
+      function toggleCard(index: number) {
+        const card = document.querySelector(`[data-player-index="${index}"]`);
+        const content = card.querySelector('.card-content');
+        const icon = card.querySelector('.expand-icon');
+        
+        if (content.style.display === 'none' || content.style.display === '') {
+          content.style.display = 'block';
+          icon.textContent = '▲';
+          card.classList.add('expanded');
+        } else {
+          content.style.display = 'none';
+          icon.textContent = '▼';
+          card.classList.remove('expanded');
+        }
+      }
+
+      // Función para alternar las secciones de reglas y estado
+      function toggleSection(sectionId: string) {
+        const content = document.getElementById(`${sectionId}-content`);
+        const icon = document.getElementById(`${sectionId}-icon`);
+        const section = content.closest('.collapsible-section');
+        
+        if (content.style.display === 'none' || content.style.display === '') {
+          content.style.display = 'block';
+          icon.textContent = '▲';
+          section.classList.add('expanded');
+        } else {
+          content.style.display = 'none';
+          icon.textContent = '▼';
+          section.classList.remove('expanded');
+        }
+      }
+
+      function sortTable(column: string) {
+        const tables = {
+          fixed: document.querySelector(".fixed-table tbody"),
+          scrollable: document.querySelector(".scrollable-table tbody"),
+        };
+
+        // Obtener todas las filas
+        const rows = Array.from(tables.fixed.querySelectorAll("tr")).map(
+          (row, index) => ({
+            fixed: row,
+            scrollable: tables.scrollable.querySelectorAll("tr")[index],
+            index,
+          })
+        );
+
+        // Determinar dirección de ordenamiento
+        const isAsc = !sortState[column];
+        sortState = {}; // Reset otros estados
+        sortState[column] = isAsc;
+
+        // Función de comparación
+        let compareFunction;
+        if (column.startsWith("jornada-")) {
+          const jornadaIndex = parseInt(column.split("-")[1]);
+          compareFunction = (
+            a: { scrollable: { children: { textContent: string }[] } },
+            b: { scrollable: { children: { textContent: string }[] } }
+          ) => {
+            const aVal = parseFloat(
+              a.scrollable.children[jornadaIndex].textContent
+            );
+            const bVal = parseFloat(
+              b.scrollable.children[jornadaIndex].textContent
+            );
+            return isAsc ? aVal - bVal : bVal - aVal;
+          };
+        } else if (column === "total") {
+          compareFunction = (
+            a: { fixed: { children: { textContent: string }[] } },
+            b: { fixed: { children: { textContent: string }[] } }
+          ) => {
+            const aVal = parseFloat(a.fixed.children[1].textContent);
+            const bVal = parseFloat(b.fixed.children[1].textContent);
+            return isAsc ? aVal - bVal : bVal - aVal;
+          };
+        } else if (column === "dinero") {
+          compareFunction = (
+            a: { fixed: { children: { textContent: string }[] } },
+            b: { fixed: { children: { textContent: string }[] } }
+          ) => {
+            const aVal = parseFloat(
+              a.fixed.children[2].textContent.replace("€", "")
+            );
+            const bVal = parseFloat(
+              b.fixed.children[2].textContent.replace("€", "")
+            );
+            return isAsc ? aVal - bVal : bVal - aVal;
+          };
+        }
+
+        // Ordenar filas
+        rows.sort(compareFunction);
+
+        // Reorganizar las tablas
+        rows.forEach((row) => {
+          tables.fixed.appendChild(row.fixed);
+          tables.scrollable.appendChild(row.scrollable);
+        });
+
+        // También ordenar las tarjetas móviles
+        const mobileCards = document.querySelector('.mobile-cards');
+        if (mobileCards) {
+          const cards = Array.from(mobileCards.querySelectorAll('.player-card'));
+          cards.sort((a, b) => {
+            const aIndex = parseInt(a.getAttribute('data-player-index'));
+            const bIndex = parseInt(b.getAttribute('data-player-index'));
+            const rowA = { fixed: rows.find(r => r.index === aIndex)?.fixed, scrollable: rows.find(r => r.index === aIndex)?.scrollable, index: aIndex };
+            const rowB = { fixed: rows.find(r => r.index === bIndex)?.fixed, scrollable: rows.find(r => r.index === bIndex)?.scrollable, index: bIndex };
+            return compareFunction ? compareFunction(rowA, rowB) : 0;
+          });
+          
+          cards.forEach(card => mobileCards.appendChild(card));
+        }
+
+        // Actualizar indicadores visuales
+        document.querySelectorAll(".sort-indicator").forEach((indicator) => {
+          indicator.textContent = "↕";
+        });
+
+        const activeHeader = document.querySelector(
+          `[data-column="${column}"] .sort-indicator`
+        );
+        if (activeHeader) {
+          activeHeader.textContent = isAsc ? "↑" : "↓";
+        }
+      }
+
+      // Agregar event listeners
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".sortable").forEach((header) => {
+          header.style.cursor = "pointer";
+          header.addEventListener("click", () => {
+            sortTable(header.dataset.column);
+          });
+        });
+
+        // Inicializar tarjetas móviles como colapsadas
+        document.querySelectorAll('.card-content').forEach(content => {
+          content.style.display = 'none';
+        });
+
+        // Inicializar secciones de reglas y estado
+        function initializeSections() {
+          const isMobile = window.innerWidth <= 768;
+          const sectionsToCollapse = ['rules', 'status'];
+          
+          sectionsToCollapse.forEach(sectionId => {
+            const content = document.getElementById(`${sectionId}-content`);
+            const icon = document.getElementById(`${sectionId}-icon`);
+            const section = content.closest('.collapsible-section');
+            
+            if (isMobile) {
+              // Colapsar por defecto en móvil
+              content.style.display = 'none';
+              icon.textContent = '▼';
+              section.classList.remove('expanded');
+            } else {
+              // Expandir por defecto en desktop
+              content.style.display = 'block';
+              icon.textContent = '▲';
+              section.classList.add('expanded');
+            }
+          });
+        }
+        
+        initializeSections();
+        
+        // Reinicializar al cambiar el tamaño de ventana
+        window.addEventListener('resize', initializeSections);
+
+        // Ordenar por defecto por la columna Total de mayor a menor
+        sortState["total"] = true; // Establecer como ascendente para que la función lo cambie a descendente
+        sortTable("total");
+      });
+
+      // Hacer las funciones globales
+      window.toggleCard = toggleCard;
+      window.toggleSection = toggleSection;
+    </script>
+  </body>
+</html>

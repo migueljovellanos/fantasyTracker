@@ -1,0 +1,63 @@
+{
+  "nombre": "Liga de huevones",
+  "totalJornadas": 38,
+  "reglas": {
+    "ultimo": 2.5,
+    "penultimo": 1.5,
+    "antepenultimo": 1.0
+  },
+  "jugadores": [
+    {
+      "nombre": "MiguelJovellanos",
+      "jornadas": [57, 52, 35]
+    },
+    {
+      "nombre": "marcos vaz",
+      "jornadas": [59, 48, 54]
+    },
+    {
+      "nombre": "HoracioGutierrez",
+      "jornadas": [88, 48, 65]
+    },
+    {
+      "nombre": "Liamdrio",
+      "jornadas": [52, 39, 50]
+    },
+    {
+      "nombre": "danielglesias_96",
+      "jornadas": [64, 56, 38]
+    },
+    {
+      "nombre": "marchao",
+      "jornadas": [47, 37, 46]
+    },
+    {
+      "nombre": "TJ7__",
+      "jornadas": [29, 23, 37]
+    },
+    {
+      "nombre": "elTurras96",
+      "jornadas": [68, 39, 42]
+    },
+    {
+      "nombre": "crissuar",
+      "jornadas": [38, 59, 36]
+    },
+    {
+      "nombre": "Sin limitee",
+      "jornadas": [36, 61, 47]
+    },
+    {
+      "nombre": "RaboteGordote",
+      "jornadas": [34, 38, 56]
+    },
+    {
+      "nombre": "hgtz",
+      "jornadas": [29, 41, 37]
+    },
+    {
+      "nombre": "kasper960",
+      "jornadas": [17, 44, 69]
+    }
+  ]
+}
