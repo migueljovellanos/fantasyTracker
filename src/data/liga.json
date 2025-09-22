@@ -9,55 +9,68 @@
   "jugadores": [
     {
       "nombre": "MiguelJovellanos",
-      "jornadas": [57, 52, 35, 17]
+      "jornadas": [57, 52, 35, 17, 71],
+      "activo": true
     },
     {
       "nombre": "marcos vaz",
-      "jornadas": [59, 48, 54, 36]
+      "jornadas": [59, 48, 54, 36, 49],
+      "activo": true
     },
     {
       "nombre": "HoracioGutierrez",
-      "jornadas": [88, 48, 65, 77]
+      "jornadas": [88, 48, 65, 77, 104],
+      "activo": true
     },
     {
       "nombre": "Liamdrio",
-      "jornadas": [52, 39, 50, 19]
+      "jornadas": [52, 39, 50, 19, 69],
+      "activo": true
     },
     {
       "nombre": "danielglesias_96",
-      "jornadas": [64, 56, 38, 69]
+      "jornadas": [64, 56, 38, 69, 50],
+      "activo": true
     },
     {
       "nombre": "marchao",
-      "jornadas": [47, 37, 46, 0]
+      "jornadas": [47, 37, 46, 0],
+      "activo": false
     },
     {
       "nombre": "TJ7__",
-      "jornadas": [29, 23, 37, 75]
+      "jornadas": [29, 23, 37, 75, 50],
+      "activo": true
     },
     {
       "nombre": "elTurras96",
-      "jornadas": [68, 39, 42, 49]
+      "jornadas": [68, 39, 42, 49, 53],
+      "activo": true
     },
     {
       "nombre": "crissuar",
-      "jornadas": [38, 59, 36, 66]
+      "jornadas": [38, 59, 36, 66, 34],
+      "activo": true
     },
     {
       "nombre": "Sin limitee",
-      "jornadas": [36, 61, 47, 27]
+      "jornadas": [36, 61, 47, 27, 73],
+      "activo": true
     },
     {
       "nombre": "RaboteGordote",
-      "jornadas": [34, 38, 56, 30]
+      "jornadas": [34, 38, 56, 30],
+      "activo": false
     },
     {
       "nombre": "hgtz",
-      "jornadas": [29, 41, 37, 39]
+      "jornadas": [29, 41, 37, 39, 39],
+      "activo": true
     },
     {
       "nombre": "kasper960",
-      "jornadas": [17, 44, 69, 33]
+      "jornadas": [17, 44, 69, 33, 43],
+      "activo": true
     }
   ]
 }
