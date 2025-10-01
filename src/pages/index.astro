@@ -365,12 +365,24 @@ const { dineroTotal: dineroDebido, coloresPorJornada, dineroPorJornada } = calcu
             a: { scrollable: { children: { textContent: string }[] } },
             b: { scrollable: { children: { textContent: string }[] } }
           ) => {
-            const aVal = parseFloat(
-              a.scrollable.children[jornadaIndex].textContent
-            );
-            const bVal = parseFloat(
-              b.scrollable.children[jornadaIndex].textContent
-            );
+            // Verificar si la celda existe para ambos jugadores
+            const aCellExists = a.scrollable.children[jornadaIndex];
+            const bCellExists = b.scrollable.children[jornadaIndex];
+            
+            // Si ninguno tiene la celda, son iguales
+            if (!aCellExists && !bCellExists) return 0;
+            
+            // Si solo uno tiene la celda, el que no la tiene va al final
+            if (!aCellExists) return isAsc ? 1 : -1;
+            if (!bCellExists) return isAsc ? -1 : 1;
+            
+            // Obtener los valores, usando 0 como valor por defecto si no hay contenido
+            const aText = aCellExists.textContent?.trim() || "0";
+            const bText = bCellExists.textContent?.trim() || "0";
+            
+            const aVal = parseFloat(aText) || 0;
+            const bVal = parseFloat(bText) || 0;
+            
             return isAsc ? aVal - bVal : bVal - aVal;
           };
         } else if (column === "total") {
