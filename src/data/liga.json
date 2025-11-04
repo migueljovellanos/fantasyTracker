@@ -9,27 +9,27 @@
   "jugadores": [
     {
       "nombre": "MiguelJovellanos",
-      "jornadas": [57, 52, 35, 17, 71, 34, 33],
+      "jornadas": [58, 52, 35, 17, 53, 34, 33, 35, 74, 58, 57],
       "activo": true
     },
     {
       "nombre": "marcos vaz",
-      "jornadas": [59, 48, 54, 36, 49, 39, 55],
+      "jornadas": [59, 48, 54, 36, 49, 39, 55, 50, 71, 48, 34],
       "activo": true
     },
     {
       "nombre": "HoracioGutierrez",
-      "jornadas": [88, 48, 65, 77, 104, 78, 45],
+      "jornadas": [88, 48, 65, 77, 104, 78, 45, 78, 82, 49, 58],
       "activo": true
     },
     {
       "nombre": "Liamdrio",
-      "jornadas": [52, 39, 50, 19, 69, 35, 35],
+      "jornadas": [52, 39, 50, 19, 69, 35, 35, 35, 35, 44, 47],
       "activo": true
     },
     {
       "nombre": "danielglesias_96",
-      "jornadas": [64, 56, 38, 69, 50, 57, 61],
+      "jornadas": [64, 56, 38, 69, 50, 57, 61, 46, 73, 76, 73],
       "activo": true
     },
     {
@@ -39,22 +39,22 @@
     },
     {
       "nombre": "TJ7__",
-      "jornadas": [29, 23, 37, 75, 50, 18, 25],
+      "jornadas": [29, 23, 37, 75, 50, 18, 25, 51, 62, 24, 32],
       "activo": true
     },
     {
       "nombre": "elTurras96",
-      "jornadas": [68, 39, 42, 49, 53, 34, 33],
+      "jornadas": [68, 39, 42, 49, 53, 34, 33, 50, 64, 62, 36],
       "activo": true
     },
     {
       "nombre": "crissuar",
-      "jornadas": [38, 59, 36, 66, 34, 55, 71],
+      "jornadas": [38, 59, 36, 66, 34, 55, 71, 45, 31, 50, 63],
       "activo": true
     },
     {
       "nombre": "Sin limitee",
-      "jornadas": [36, 61, 47, 27, 73, 52, 48],
+      "jornadas": [36, 61, 47, 27, 73, 52, 48, 23, 64, 61, 47],
       "activo": true
     },
     {
@@ -64,12 +64,12 @@
     },
     {
       "nombre": "hgtz",
-      "jornadas": [29, 41, 37, 39, 39, 30, 32],
+      "jornadas": [29, 41, 37, 39, 39, 30, 32, 0, 0],
       "activo": true
     },
     {
       "nombre": "kasper960",
-      "jornadas": [17, 44, 69, 33, 43, 51, 59],
+      "jornadas": [17, 44, 69, 33, 43, 51, 59, 41, 66, 44, 54],
       "activo": true
     }
   ]
